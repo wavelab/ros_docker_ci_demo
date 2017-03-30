@@ -8,6 +8,8 @@ sudo: required
 env:
   global:
   - DOCKER_CACHE_DIR=$HOME/docker_cache
+  # YOU MUST EDIT THIS VARIABLE TO MATCH YOUR REPO
+  - DOCKER_CI_REL_DIR=dependencies/ros_docker_ci
   matrix:
     - DOCKER_DISTRO=trusty
     - DOCKER_DISTRO=xenial
@@ -20,22 +22,27 @@ before_install:
   - git submodule -q update
 
 # Load the cached docker container. Otherwise, delete and rebuild it.
+#
+# NOTE: The repo must have a the following script:
+#   scripts/install_deps_for_docker_ci
+# which defines how the docker container performs setup. Ideally this will just
+# wrap the repo's standard script for installing dependencies
 install:
-  - travis_wait 45 bash ros_docker_ci/docker-setup-ci.bash
+  - travis_wait 45 bash ${DOCKER_CI_REL_DIR}/docker-setup-ci.bash
 
 # Execute the CI script using the docker container
 #
-# YOU MUST EDIT THIS CALL
+# YOU MUST EDIT THIS CALL'S TWO ARGUMENTS TO MATCH YOUR REPO
 #
 # docker-run-ci.sh takes two arguments:
 #   {1}: The repository name
-#   {2}: The relative path to the repository's own CI test script
+#   {2}: The relative path to the respository's own CI test script
 script:
-  - bash ros_docker_ci/docker-run-ci.sh ros_docker_ci_demo scripts/run-ci-tests.sh
+  - bash ${DOCKER_CI_REL_DIR}/docker-run-ci.bash ros_docker_ci_demo scripts/run-ci-tests.bash
 
 # Cache the docker container if it was rebuilt above.
 before_cache:
-  - bash ros_docker_ci/save-docker-cache-ci.bash
+  - bash ${DOCKER_CI_REL_DIR}/save-docker-cache-ci.bash
 
 cache:
   directories:
