@@ -1,0 +1,43 @@
+################################################################################
+
+# Use ubuntu trusty (14.04) with sudo privileges.
+dist: trusty
+sudo: required
+
+# Set build matrix and global CI env variables
+env:
+  global:
+  - DOCKER_CACHE_DIR=$HOME/docker_cache
+  matrix:
+    - DOCKER_DISTRO=trusty
+    - DOCKER_DISTRO=xenial
+
+################################################################################
+
+# Have to pull git outside of docker as the container doesn't have an ssh key.
+before_install:
+  - git submodule init
+  - git submodule -q update
+
+# Load the cached docker container. Otherwise, delete and rebuild it.
+install:
+  - travis_wait 45 bash ros_docker_ci/docker-setup-ci.bash
+
+# Execute the CI script using the docker container
+#
+# YOU MUST EDIT THIS CALL
+#
+# docker-run-ci.sh takes two arguments:
+#   {1}: The repository name
+#   {2}: The relative path to the repository's own CI test script
+script:
+  - bash ros_docker_ci/docker-run-ci.sh ros_docker_ci_demo scripts/run-ci-tests.sh
+
+# Cache the docker container if it was rebuilt above.
+before_cache:
+  - bash ros_docker_ci/save-docker-cache-ci.bash
+
+cache:
+  directories:
+    - $HOME/docker_cache
+  timeout: 1200
