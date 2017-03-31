@@ -1,3 +1,3 @@
 [submodule "dependencies/ros_docker_ci"]
 	path = dependencies/ros_docker_ci
-	url = git@github.com:wavelab/ros_docker_ci.git
+	url = https://github.com/wavelab/ros_docker_ci.git
