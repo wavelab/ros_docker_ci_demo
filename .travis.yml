@@ -24,7 +24,7 @@ before_install:
 # Load the cached docker container. Otherwise, delete and rebuild it.
 #
 # NOTE: The repo must have the following script:
-#   scripts/install_deps_for_docker_ci
+#   scripts/install_deps_for_docker_ci.bash
 # which defines how the docker container performs setup. Ideally this will just
 # wrap the repo's standard script for installing dependencies
 install:
