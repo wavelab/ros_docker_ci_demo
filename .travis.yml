@@ -8,7 +8,7 @@ sudo: required
 env:
   global:
   - DOCKER_CACHE_DIR=$HOME/docker_cache
-  # YOU MUST EDIT THIS VARIABLE TO MATCH YOUR REPO
+  # MODIFY_ME: YOU MUST EDIT THIS VARIABLE TO MATCH YOUR REPO
   - DOCKER_CI_REL_DIR=dependencies/ros_docker_ci
   matrix:
     - DOCKER_DISTRO=trusty
@@ -32,7 +32,7 @@ install:
 
 # Execute the CI script using the docker container
 #
-# YOU MUST EDIT THIS CALL'S TWO ARGUMENTS TO MATCH YOUR REPO
+# MODIFY_ME: YOU MUST EDIT THIS CALL'S TWO ARGUMENTS TO MATCH YOUR REPO
 #
 # docker-run-ci.sh takes two arguments:
 #   {1}: The repository name
