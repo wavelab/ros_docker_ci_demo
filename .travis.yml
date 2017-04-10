@@ -8,7 +8,7 @@ sudo: required
 env:
   global:
   - DOCKER_CACHE_DIR=$HOME/docker_cache
-  # YOU MUST EDIT THIS VARIABLE TO MATCH YOUR REPO
+  # MODIFY_ME: You must edit DOCKER_CI_REL_DIR to match your repo
   - DOCKER_CI_REL_DIR=dependencies/ros_docker_ci
   matrix:
     - DOCKER_DISTRO=trusty
@@ -16,7 +16,6 @@ env:
 
 ################################################################################
 
-# Have to pull git outside of docker as the container doesn't have an ssh key.
 before_install:
   - git submodule init
   - git submodule -q update
@@ -32,13 +31,12 @@ install:
 
 # Execute the CI script using the docker container
 #
-# YOU MUST EDIT THIS CALL'S TWO ARGUMENTS TO MATCH YOUR REPO
+# MODIFY_ME: You must edit this call's argument to match your repo
 #
-# docker-run-ci.sh takes two arguments:
-#   {1}: The repository name
-#   {2}: The relative path to the respository's own CI test script
+# docker-run-ci.sh takes one argument:
+#   {1}: The relative path to the respository's own CI test script
 script:
-  - bash ${DOCKER_CI_REL_DIR}/docker-run-ci.bash ros_docker_ci_demo scripts/run-ci-tests.bash
+  - bash ${DOCKER_CI_REL_DIR}/docker-run-ci.bash scripts/run-ci-tests.bash
 
 # Cache the docker container if it was rebuilt above.
 before_cache:
